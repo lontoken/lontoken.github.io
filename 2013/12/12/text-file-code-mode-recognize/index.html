@@ -1,0 +1,657 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="文本文件,编码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="文本文件编码模式识别文本文件的编码问题，困扰我很久，在跨平台、源程序中的中文字符、从文本文件中读取中文字符的时候，若对文件编码问题没有弄清楚，难免会走弯路。对此情况，我准备针对几个主题，记录下自己学习的心得，以备日后查阅和分享。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文本文件编码模式识别">
+<meta property="og:url" content="http://yoursite.com/2013/12/12/text-file-code-mode-recognize/index.html">
+<meta property="og:site_name" content="lontoken' blog">
+<meta property="og:description" content="文本文件编码模式识别文本文件的编码问题，困扰我很久，在跨平台、源程序中的中文字符、从文本文件中读取中文字符的时候，若对文件编码问题没有弄清楚，难免会走弯路。对此情况，我准备针对几个主题，记录下自己学习的心得，以备日后查阅和分享。">
+<meta property="og:updated_time" content="2016-05-12T17:32:55.628Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文本文件编码模式识别">
+<meta name="twitter:description" content="文本文件编码模式识别文本文件的编码问题，困扰我很久，在跨平台、源程序中的中文字符、从文本文件中读取中文字符的时候，若对文件编码问题没有弄清楚，难免会走弯路。对此情况，我准备针对几个主题，记录下自己学习的心得，以备日后查阅和分享。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 文本文件编码模式识别 | lontoken' blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2f2bb507fa5f77e7b3752a4657d34e9f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">lontoken' blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                文本文件编码模式识别
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2013-12-12T00:00:00+08:00" content="2013-12-12">
+              2013-12-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/12/text-file-code-mode-recognize/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/12/text-file-code-mode-recognize/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文本文件编码模式识别"><a href="#文本文件编码模式识别" class="headerlink" title="文本文件编码模式识别"></a>文本文件编码模式识别</h1><p>文本文件的编码问题，困扰我很久，在跨平台、源程序中的中文字符、从文本文件中读取中文字符的时候，若对文件编码问题没有弄清楚，难免会走弯路。对此情况，我准备针对几个主题，记录下自己学习的心得，以备日后查阅和分享。<br><a id="more"></a></p>
+<h2 id="认识文本文件"><a href="#认识文本文件" class="headerlink" title="认识文本文件"></a>认识文本文件</h2><p>文件分为两种类型：文本文件和二进制文件；<br>文件文件：是以字符编码的方式进行保存的；每一行都以换行符结束(由于历史原因，各操作系统的换行符不一样，Windows的是”&lt;回车&gt;&lt;换行&gt;”，即”\r\n”，Unix/Linux的是”&lt;换行&gt;”，即”\n”，Mac的是”回车”，即”\r”)；在文件最后一行的结尾有文件结束标志EOF，它的值也依赖于系统，一般为-1。<br>二进制文件：是将内存中数据原封不动的读取和写入文件中。 </p>
+<h2 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h2><p>一般常见的编码格式有：ASCII、UTF-8、UTF-16、GB2312、Big5、GBK、GB18030。<br>详细的字符编码知识，此处不再多说。 </p>
+<p>需要知道的事： </p>
+<ul>
+<li>在Windows的语境中，所谓的[ANSI]指的是对应当前系统 locale 的遗留(legacy)编码。 </li>
+<li>在Windows的语境中，所谓的[Unicode]指的是带有 BOM 的小端序 UTF-16。 </li>
+<li>在Windows的语境中，所谓的[UTF-8]指的是带 BOM 的 UTF-8。</li>
+</ul>
+<h2 id="文件编码的模式识别"><a href="#文件编码的模式识别" class="headerlink" title="文件编码的模式识别"></a>文件编码的模式识别</h2><p>知道了字符编码的细节，还不足以正确处理我们所面对的种类繁多的文本文件。<br>首先，我们看看各编码格式的文件存储格式。 </p>
+<p><em>BOM</em>：要识别UTF-8和UTF-16就不得不说到字节顺序标记(byte-order mark，BOM)，它用来标识该字节流的字节序，是高位在前还是低位在前。从Unicode3.2开始，BOM只能位于流的开头，只能用于标识字节序。  </p>
+<blockquote>
+<p>  UTF-16中，字节顺序标记被放置为文件或字符串流的第一个字符，以标示在此文件或字符串流中，以所有十六比特为单位的字码的尾序（字节顺序）。</p>
+<ul>
+<li>如果十六比特单位被表示成大尾序，这字节顺序标记字符在串行中将呈现0xFE，其后跟着0xFF（其中的0x用来标示十六进制）。</li>
+<li><p>如果十六比特单位使用小尾序，这个字节串行为0xFF，其后接着0xFE。 </p>
+<p>UTF-8则没有字节顺序的议题。UTF-8编码过的字节顺序标记则被用来标示它是UTF-8的文件。它只用来标示一个UTF-8的文件，而不用来说明字节顺序。<br>许多Windows程序(如记事本)会添加字节顺序标记到UTF-8文件。然而，在类Unix系统(大量使用文本文件，用于文件格式，用于进程间通信)中，这种作法则不被建议采用。<br>故，UTF-8分为UTF-8有BOM格式和UTF-8无BOM格式。  </p>
+</li>
+</ul>
+</blockquote>
+<p><em>UTF-8</em>:<br>若为UTF-8有BOM格式，则文件开头为 EF BB BF；<br>若为UTF-8无BOM格式，则不能依据上述规则；此时需要依据UTF-8编码格式来判断，其编码如下：</p>
+<blockquote>
+<p>  U-00000000 - U-0000007F: 0xxxxxxx<br>  U-00000080 - U-000007FF: 110xxxxx 10xxxxxx<br>  U-00000800 - U-0000FFFF: 1110xxxx 10xxxxxx 10xxxxxx<br>  U-00010000 - U-001FFFFF: 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx<br>  U-00200000 - U-03FFFFFF: 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx<br>  U-04000000 - U-7FFFFFFF: 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx   </p>
+</blockquote>
+<p><em>UTF-16</em>:<br>若为UTF-16(大端序),则文件开头为 FE FF;<br>若为UTF-16(小端序),则文件开头为 FF FE; </p>
+<p><em>GB2312</em>:<br>GB2312中对所收汉字进行了”分区”处理，每区含有94个汉字/符号。这种表示方式也称为区位码。</p>
+<blockquote>
+<ul>
+<li>01-09区为特殊符号。</li>
+<li>16-55区为一级汉字，按拼音排序。</li>
+<li>56-87区为二级汉字，按部首/笔画 排序。  </li>
+</ul>
+</blockquote>
+<p>在使用GB2312的程序通常采用EUC储存方法，以便兼容于ASCII.<br>ASCII字符，范围为0x20-0x7E，直接用单字节表示。<br>每个汉字及符号以两个字节来表示。第一个字节称为”高位字节”，第二个字节称为”低位字节”。<br>“高位字节”使用了0xA1-0xF7(把01-87区的区号加上0xA0)，”低位字节”使用了0xA1-0xFE(把01-94加上0xA0)。 </p>
+<p><em>Big5</em>:<br>Big5码是一套双字节字符集，使用了双八码存储方法，以两个字节来安放一个字。第一个字节称为”高位字节”，第二个字节称为”低位字节”。<br>“高位字节”使用了0x80-0xFE，”低位字节”使用了0x40-0x7E，及0xA1-0xFE。<br>因Big5相对使用较少，此处不做识别。  </p>
+<p><em>GBK</em>:<br>字符有一字节和双字节编码，00–7F范围内是一位，和ASCII保持一致，此范围内严格上说有96个文字和32个控制符号。<br>之后的双字节中，前一字节是双字节的第一位。总体上说第一字节的范围是81–FE（也就是不含80和FF），第二字节的一部分领域在40–7E，其他领域在80–FE. </p>
+<p><em>GB18030</em>:<br>标准采用单字节、双字节和四字节三种方式对字符编码。<br>使用0×00至0×7F码位(对应于ASCII码的相应码位)。<br>双字节部分，首字节码位从0×81至0×FE，尾字节码位分别是0×40至0×7E和0×80至0×FE。<br>四字节部分采用GB/T 11383未采用的0×30到0×39作为对双字节编码扩充的后缀，这样扩充的四字节编码，其范围为0×81308130到0×FE39FE39。其中第 一、三个字节编码码位均为0×81至0×FE，第二、四个字节编码码位均为0×30至0×39。 </p>
+<h3 id="面向字节的模式识别"><a href="#面向字节的模式识别" class="headerlink" title="面向字节的模式识别"></a>面向字节的模式识别</h3><p>UTF-16 直接根据其BOM识别；<br>UTF-8 首先根据BOM识别，若不符，再以上述编码规则识别；<br>GB2321、GB18030 因GB18030完全兼容GB2321，则只识别GB18030，根据如下规则识别： </p>
+<blockquote>
+<p>   单字节: 0到0x7F<br>         0000.0000-0111.1111<br>   双字节: 第一个字节的值从0x81到0xFE，第二个字节的值从0x40到0xFE(不包括0x7F)<br>         1000.0001-1111.1110  0100.0000-1111.1110<br>   四字节，第一个字节的值从0x81到0xFE，第二个字节的值从0x30到0x39，第三个字节从0x81到0xFE，第四个字节从0x30到0x39<br>         1000.0001-1111.1110  0011.0000-0011.10001  1000.0001-1111.1110  0011.0000-0011.10001</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/文本文件-编码/" rel="tag">#文本文件,编码</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/04/02/the-md5-of-compiler-out/" rel="next" title="编译器产生的输出文件的MD5值与生成代码的关系">
+                <i class="fa fa-chevron-left"></i> 编译器产生的输出文件的MD5值与生成代码的关系
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/12/24/stack-of-lua-by-source/" rel="prev" title="lua的栈--源码分析">
+                lua的栈--源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013/12/12/text-file-code-mode-recognize/"
+           data-title="文本文件编码模式识别" data-url="http://yoursite.com/2013/12/12/text-file-code-mode-recognize/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="lontoken" />
+          <p class="site-author-name" itemprop="name">lontoken</p>
+          <p class="site-description motion-element" itemprop="description">简单 可依赖</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文本文件编码模式识别"><span class="nav-number">1.</span> <span class="nav-text">文本文件编码模式识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#认识文本文件"><span class="nav-number">1.1.</span> <span class="nav-text">认识文本文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符编码"><span class="nav-number">1.2.</span> <span class="nav-text">字符编码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件编码的模式识别"><span class="nav-number">1.3.</span> <span class="nav-text">文件编码的模式识别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向字节的模式识别"><span class="nav-number">1.3.1.</span> <span class="nav-text">面向字节的模式识别</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lontoken</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lontoken"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

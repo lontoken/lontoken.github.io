@@ -119,6 +119,16 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2f2bb507fa5f77e7b3752a4657d34e9f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
 
 
@@ -233,8 +243,8 @@
             
               
                 
-                <a class="post-title-link" href="/2016/05/12/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2016/04/26/use-electron-build-tool-to-mysql-comparer/" itemprop="url">
+                  使用Electron创建Mysql数据比对工具
                 </a>
               
             
@@ -247,14 +257,40 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-05-12T23:27:08+08:00" content="2016-05-12">
-              2016-05-12
+            <time itemprop="dateCreated" datetime="2016-04-26T00:00:00+08:00" content="2016-04-26">
+              2016-04-26
             </time>
           </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Electron-Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Electron Mysql</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
 
           
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/26/use-electron-build-tool-to-mysql-comparer/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/26/use-electron-build-tool-to-mysql-comparer/" itemprop="commentsCount"></span>
+                </a>
+              </span>
             
           
 
@@ -276,18 +312,1125 @@
 
       
         
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+          <h1 id="使用Electron创建Mysql数据比对工具"><a href="#使用Electron创建Mysql数据比对工具" class="headerlink" title="使用Electron创建Mysql数据比对工具"></a>使用Electron创建Mysql数据比对工具</h1><h2 id="项目由来"><a href="#项目由来" class="headerlink" title="项目由来"></a>项目由来</h2><p>工作中的项目使用MySql，在学习系统的数据数量和测试服务时，经常需要去比对一个表两个时间点的数据变化。<br>搜索相关工具不得，而之前又玩过Electron，一直没有找个机会练练手，因有此项目。<br>项目源码已开源，地址：<a href="http://git.oschina.net/lontoken/MysqlComparer">http://git.oschina.net/lontoken/MysqlComparer</a><br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/04/26/use-electron-build-tool-to-mysql-comparer/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/04/duivision-learning-notes/" itemprop="url">
+                  DuiVision学习笔记
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-04T00:00:00+08:00" content="2016-03-04">
+              2016-03-04
+            </time>
+          </span>
 
           
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/DuiVision/" itemprop="url" rel="index">
+                    <span itemprop="name">DuiVision</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/04/duivision-learning-notes/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/04/duivision-learning-notes/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="DuiVision学习笔记"><a href="#DuiVision学习笔记" class="headerlink" title="DuiVision学习笔记"></a>DuiVision学习笔记</h1><h2 id="DuiVision说明"><a href="#DuiVision说明" class="headerlink" title="DuiVision说明"></a>DuiVision说明</h2><p>DirectUI 技术一般是指将所有的界面控件都绘制在一个窗口上，这些控件的逻辑和绘图方式都必须自己进行编写和封装，而不是使用 Windows 控件，所以这些控件都是无句柄的。<br>DirectUI 技术需要解决的主要问题如下：</p>
+<ol>
+<li>窗口的子类化，截获窗口的消息。</li>
+<li>封装自己的控件，并将自己的控件绘制到该窗口上。</li>
+<li>封装窗口的消息，并分发到自己的控件上，让自己的控件根据消息进行响应和绘制。</li>
+<li>根据不同的行为发送自定义消息给窗口，以便程序进行调用。</li>
+<li>一般窗口上控件的组织使用 XML 来描述。通常 DirectUI 的界面库都采用 XML 配置文件+图片+控制脚本（Lua、 Javascript 等）的开发方式，非常类似于 Web 程序的开发方式，当然这里面控制脚本也可以直接使用 C++代码来实现。
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2016/03/04/duivision-learning-notes/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/10/31/intall-web.py-on-centos7/" itemprop="url">
+                  CentOS7上安装web.py
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-10-31T00:00:00+08:00" content="2015-10-31">
+              2015-10-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web-py/" itemprop="url" rel="index">
+                    <span itemprop="name">web.py</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/10/31/intall-web.py-on-centos7/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/10/31/intall-web.py-on-centos7/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="CentOS7上安装web-py"><a href="#CentOS7上安装web-py" class="headerlink" title="CentOS7上安装web.py  "></a>CentOS7上安装web.py  </h1><h1 id="环境和版本"><a href="#环境和版本" class="headerlink" title="环境和版本"></a>环境和版本</h1><blockquote>
+<p>   操作系统：CentOS 7 64位<br>   python版本：2.7.5</p>
+</blockquote>
+<h1 id="EasyInstall安装"><a href="#EasyInstall安装" class="headerlink" title="EasyInstall安装"></a>EasyInstall安装</h1><p>用来下载安装Python一个公共资源库PyPI的相关资源包的。有了EasyInstall，python的包管理会简单很多。  </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/31/intall-web.py-on-centos7/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2015/04/07/access-linux-by-ssh-on-windows/" itemprop="url">
+                  Windows下通过SSH远程访问Linux
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-04-07T00:00:00+08:00" content="2015-04-07">
+              2015-04-07
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/SSL/" itemprop="url" rel="index">
+                    <span itemprop="name">SSL</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2015/04/07/access-linux-by-ssh-on-windows/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/07/access-linux-by-ssh-on-windows/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Windows下通过SSH远程访问Linux"><a href="#Windows下通过SSH远程访问Linux" class="headerlink" title="Windows下通过SSH远程访问Linux  "></a>Windows下通过SSH远程访问Linux  </h1><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在Linux下的程序部署、程序运行时控制等情景中，希望能在Windows下以可视化的方式操作。<br>在Windows下访问/控制Linux最好的方式无疑是通过SSH。<br>本文将详细说明Windows下使用SSH访问Linux，SSH库选用开源的libssh2，其openssl和zlib库。下面将详细说明它们的编译和使用，并简单的演示对Linux的访问/控制。   </p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/04/07/access-linux-by-ssh-on-windows/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/11/24/memcached_install_and_libmemcached_uses/" itemprop="url">
+                  memcached安装和libmemcached的使用
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-11-24T00:00:00+08:00" content="2014-11-24">
+              2014-11-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/memcached/" itemprop="url" rel="index">
+                    <span itemprop="name">memcached</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/11/24/memcached_install_and_libmemcached_uses/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/11/24/memcached_install_and_libmemcached_uses/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="memcached安装和libmemcached的使用"><a href="#memcached安装和libmemcached的使用" class="headerlink" title="memcached安装和libmemcached的使用  "></a>memcached安装和libmemcached的使用  </h1><h1 id="环境和版本"><a href="#环境和版本" class="headerlink" title="环境和版本"></a>环境和版本</h1><blockquote>
+<p>   操作系统：Ubuntu14.04 32bit<br>   libevent版本: 2.0.21<br>   memdatach版本: v1.4.21  </p>
+</blockquote>
+<h1 id="libevent安装"><a href="#libevent安装" class="headerlink" title="libevent安装"></a>libevent安装</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#wget http://github.com/downloads/libevent/libevent/libevent-2.0.21-stable.tar.gz</span><br><span class="line">#tar -xvzf libevent-2.0.21-stable.tar.gz</span><br><span class="line">#cd libevent-2.0.21-stable</span><br><span class="line">#./configure -prefix=/usr</span><br><span class="line">#make</span><br><span class="line">#make install</span><br></pre></td></tr></table></figure>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/11/24/memcached_install_and_libmemcached_uses/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/02/14/analysis-of-lua-bytecode-flie/" itemprop="url">
+                  lua字节码的解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-02-14T00:00:00+08:00" content="2014-02-14">
+              2014-02-14
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/lua/" itemprop="url" rel="index">
+                    <span itemprop="name">lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/02/14/analysis-of-lua-bytecode-flie/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/02/14/analysis-of-lua-bytecode-flie/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="lua字节码的解析"><a href="#lua字节码的解析" class="headerlink" title="lua字节码的解析"></a>lua字节码的解析</h1><h1 id="lua的字节码"><a href="#lua的字节码" class="headerlink" title="lua的字节码"></a>lua的字节码</h1><p>lua源码在执行前，会被编译为字节码，字节码能加快程序的加载，保存lua源码被意外的修复。lua的字节码只在具有相同的字长和字节顺序的机器上能够移植。<br>luac编译器能将lua源码编译为字节码二进制文件，其命 令如:<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/02/14/analysis-of-lua-bytecode-flie/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/" itemprop="url">
+                  A template class for binding C++ to Lua(翻译)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-01-06T00:00:00+08:00" content="2014-01-06">
+              2014-01-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/lua/" itemprop="url" rel="index">
+                    <span itemprop="name">lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="A-template-class-for-binding-C-to-Lua"><a href="#A-template-class-for-binding-C-to-Lua" class="headerlink" title="A template class for binding C++ to Lua"></a>A template class for binding C++ to Lua</h1><p>英文原文：<a href="http://www.lua.org/notes/ltn005.html">A template class for binding C++ to Lua</a></p>
+<p>最近在研究C/C++和Lua的交互问题，顺便看了下luna，自己尝试着翻译了此文，以供分享，初始翻译，权当练习。  </p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>此文介绍了一种将C++类绑定到Lua的方法。Lua没有直接提供此方法，而是通过底层的C接口和扩展机制来实现。我所描述的方法使用了Lua的C接口、C++模板和Lua的扩展机制，构建了一个小巧、简单且高效的提供类注册服务的静态模板类。这个方法对你的类只有一个小小的要求，即只有签名为 int(T::*)(lua_State*) 的成员函数能被注册。但是，正如我将要展示的，这个限制也能被克服。The end result is a clean interface to register classes, and familiar Lua table semantics of classes in Lua。此处描述的解决方案依赖于一个我命名为<a href="http://lua-users.org/files/wiki_insecure/users/lpalozzi/luna.tar.gz">Luna</a>的模板类。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2014/01/05/lua-and-c-interaction-by-source/" itemprop="url">
+                  Lua和C交互之Lua调用C--源码分析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-01-05T00:00:00+08:00" content="2014-01-05">
+              2014-01-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/01/05/lua-and-c-interaction-by-source/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/01/05/lua-and-c-interaction-by-source/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="Lua和C交互–源码分析"><a href="#Lua和C交互–源码分析" class="headerlink" title="Lua和C交互–源码分析"></a>Lua和C交互–源码分析</h1><p>最近在读Lua的源码，之前在Lua中调用C导出的函数和导出的userdata，觉得很方便，没去深究，不知道自己写的代码在栈层面是个如何情形，为什么lua中的一个函数调用，就能进入dll库的对应里。想弄明白这些问题，通过google搜索，大多没有深入的分析，不能令人满意。现在借此机会，将整个流程弄明白，顺便分享。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2014/01/05/lua-and-c-interaction-by-source/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/12/24/stack-of-lua-by-source/" itemprop="url">
+                  lua的栈--源码分析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2013-12-24T00:00:00+08:00" content="2013-12-24">
+              2013-12-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/lua/" itemprop="url" rel="index">
+                    <span itemprop="name">lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/24/stack-of-lua-by-source/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/24/stack-of-lua-by-source/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="lua的栈–源码分析"><a href="#lua的栈–源码分析" class="headerlink" title="lua的栈–源码分析"></a>lua的栈–源码分析</h1><p>lua中有两种栈:数据栈和调用栈.</p>
+<h2 id="栈的定义和结构"><a href="#栈的定义和结构" class="headerlink" title="栈的定义和结构"></a>栈的定义和结构</h2><p>lua中的数据可以分为两类:值类型和引用类型,值类型可以被任意复制,而引用类型共享一份数据,复制时只是复制其引用,并由GC负责维护其生命期.lua使用一个unine Value来保存数据.<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/12/24/stack-of-lua-by-source/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2013/12/12/text-file-code-mode-recognize/" itemprop="url">
+                  文本文件编码模式识别
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2013-12-12T00:00:00+08:00" content="2013-12-12">
+              2013-12-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/其它/" itemprop="url" rel="index">
+                    <span itemprop="name">其它</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/12/text-file-code-mode-recognize/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/12/text-file-code-mode-recognize/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="文本文件编码模式识别"><a href="#文本文件编码模式识别" class="headerlink" title="文本文件编码模式识别"></a>文本文件编码模式识别</h1><p>文本文件的编码问题，困扰我很久，在跨平台、源程序中的中文字符、从文本文件中读取中文字符的时候，若对文件编码问题没有弄清楚，难免会走弯路。对此情况，我准备针对几个主题，记录下自己学习的心得，以备日后查阅和分享。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2013/12/12/text-file-code-mode-recognize/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -317,6 +1460,10 @@
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -355,13 +1502,27 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
 
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
           
 
         </nav>
@@ -486,9 +1647,28 @@
 
   
 
+  
+    
+  
 
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lontoken"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
 
   
+    
+  
+
+
 
 
 

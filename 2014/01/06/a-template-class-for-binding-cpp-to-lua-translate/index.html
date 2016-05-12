@@ -1,0 +1,664 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="lua,翻译,C++," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="A template class for binding C++ to Lua英文原文：A template class for binding C++ to Lua
+最近在研究C/C++和Lua的交互问题，顺便看了下luna，自己尝试着翻译了此文，以供分享，初始翻译，权当练习。  
+摘要此文介绍了一种将C++类绑定到Lua的方法。Lua没有直接提供此方法，而是通过底层的C接口和扩展机制来实现。我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A template class for binding C++ to Lua(翻译)">
+<meta property="og:url" content="http://yoursite.com/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/index.html">
+<meta property="og:site_name" content="lontoken' blog">
+<meta property="og:description" content="A template class for binding C++ to Lua英文原文：A template class for binding C++ to Lua
+最近在研究C/C++和Lua的交互问题，顺便看了下luna，自己尝试着翻译了此文，以供分享，初始翻译，权当练习。  
+摘要此文介绍了一种将C++类绑定到Lua的方法。Lua没有直接提供此方法，而是通过底层的C接口和扩展机制来实现。我">
+<meta property="og:updated_time" content="2016-05-12T17:37:54.393Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A template class for binding C++ to Lua(翻译)">
+<meta name="twitter:description" content="A template class for binding C++ to Lua英文原文：A template class for binding C++ to Lua
+最近在研究C/C++和Lua的交互问题，顺便看了下luna，自己尝试着翻译了此文，以供分享，初始翻译，权当练习。  
+摘要此文介绍了一种将C++类绑定到Lua的方法。Lua没有直接提供此方法，而是通过底层的C接口和扩展机制来实现。我">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> A template class for binding C++ to Lua(翻译) | lontoken' blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2f2bb507fa5f77e7b3752a4657d34e9f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">lontoken' blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                A template class for binding C++ to Lua(翻译)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-01-06T00:00:00+08:00" content="2014-01-06">
+              2014-01-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/lua/" itemprop="url" rel="index">
+                    <span itemprop="name">lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="A-template-class-for-binding-C-to-Lua"><a href="#A-template-class-for-binding-C-to-Lua" class="headerlink" title="A template class for binding C++ to Lua"></a>A template class for binding C++ to Lua</h1><p>英文原文：<a href="http://www.lua.org/notes/ltn005.html" target="_blank" rel="external">A template class for binding C++ to Lua</a></p>
+<p>最近在研究C/C++和Lua的交互问题，顺便看了下luna，自己尝试着翻译了此文，以供分享，初始翻译，权当练习。  </p>
+<h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>此文介绍了一种将C++类绑定到Lua的方法。Lua没有直接提供此方法，而是通过底层的C接口和扩展机制来实现。我所描述的方法使用了Lua的C接口、C++模板和Lua的扩展机制，构建了一个小巧、简单且高效的提供类注册服务的静态模板类。这个方法对你的类只有一个小小的要求，即只有签名为 int(T::*)(lua_State*) 的成员函数能被注册。但是，正如我将要展示的，这个限制也能被克服。The end result is a clean interface to register classes, and familiar Lua table semantics of classes in Lua。此处描述的解决方案依赖于一个我命名为<a href="http://lua-users.org/files/wiki_insecure/users/lpalozzi/luna.tar.gz" target="_blank" rel="external">Luna</a>的模板类。<br><a id="more"></a></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>Lua的接口的设计，不能注册C++类到Lua中，只提供了注册签名为 int()(lua_State*) 的C函数。实际上，这是Lua支持注册的唯一C数据类型。为了注册其它类型，你需要使用Lua提供的扩展机制，如tag methods、closures等。为了创建注册C++类到Lua的方案，必须使用这些扩展机制。</p>
+<h2 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h2><p>此方案主要有4个元素：类注册、对象实例化、成员函数调用和垃圾回收。</p>
+<p>类注册是通过以类的名字注册一个表构造函数(a table constructor function with the name of the class)。表构造函数是一个在lua_State中注册一个表的静态模板函数。</p>
+<p>注释：静态类成员函数是和C函数相兼容的，如果它们的签名相同，则我们可以在Lua中注册它们。下面的代码片段是一个模板类的成员函数，T 是待注册的类。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Register</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">    lua_pushcfunction(L, &amp;Luna&lt;T&gt;::constructor);</span><br><span class="line">    lua_setglobal(L, T::className);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (otag == <span class="number">0</span>) &#123;</span><br><span class="line">        otag = lua_newtag(L);</span><br><span class="line">        lua_pushcfunction(L, &amp;Luna&lt;T&gt;::gc_obj);</span><br><span class="line">        lua_settagmethod(L, otag, <span class="string">"gc"</span>); <span class="comment">/* tm to release objects */</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对象实例化是通过passing any arguments the user passed to the table constructor function to the constructor of the C++ object，创建一个代表对象的表，注册一些类的成员函数到表上，最后将表返回给Lua。对象的指针做为userdata保存在表中，其对应的索引为0。成员函数的序号做为闭包的值保存在所有函数中。More on the member function map later。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">constructor</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">    T* obj= new T(L); <span class="comment">/* new T */</span></span><br><span class="line">    <span class="comment">/* user is expected to remove any values from stack */</span></span><br><span class="line"></span><br><span class="line">    lua_newtable(L); <span class="comment">/* new table object */</span></span><br><span class="line">    lua_pushnumber(L, <span class="number">0</span>); <span class="comment">/* userdata obj at index 0 */</span></span><br><span class="line">    lua_pushusertag(L, obj, otag); <span class="comment">/* have gc call tm */</span></span><br><span class="line">    lua_settable(L, <span class="number">-3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* register the member functions */</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; T::Register[i].name; i++) &#123;</span><br><span class="line">        lua_pushstring(L, T::Register[i].name);</span><br><span class="line">        lua_pushnumber(L, i);</span><br><span class="line">        lua_pushcclosure(L, &amp;Luna&lt;T&gt;::thunk, <span class="number">1</span>);</span><br><span class="line">        lua_settable(L, <span class="number">-3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    return <span class="number">1</span>; <span class="comment">/* return the table object */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不像C函数，C++成员函数需要类的对象来调用。成员函数的调用是通过thunks函数，它由一个对象指针和成员函数指针来做实际的调用。成员函数指针是保存在函数的闭包值里，对应成员函数的哈希表中，对象的指针是表的序号0对应的值。注意，在Lua中所有的类函数都是通过下面的函数来注册。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">thunk</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">    <span class="comment">/* stack = closure(-1), [args...], 'self' table(1) */</span></span><br><span class="line">    <span class="keyword">int</span> i = <span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(lua_tonumber(L,<span class="number">-1</span>));</span><br><span class="line">    lua_pushnumber(L, <span class="number">0</span>); <span class="comment">/* userdata object at index 0 */</span></span><br><span class="line">    lua_gettable(L, <span class="number">1</span>);</span><br><span class="line">    T* obj = <span class="keyword">static_cast</span>&lt;T*&gt;(lua_touserdata(L,<span class="number">-1</span>));</span><br><span class="line">    lua_pop(L, <span class="number">2</span>); <span class="comment">/* pop closure value and obj */</span></span><br><span class="line">    return (obj-&gt;*(T::Register[i].mfunc))(L);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>垃圾回收是通过在设置表中userdata的垃圾回收标志方法。当垃圾回收被触发时，’gc’标志方法就会被调用以删除对象。’gc’标志方法是在类注册时通过一个新的标志注册的。在上面的实例化时，userdata就通过一个标签来标志。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">gc_obj</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">    T* obj = <span class="keyword">static_cast</span>&lt;T*&gt;(lua_touserdata(L, <span class="number">-1</span>));</span><br><span class="line">    <span class="keyword">delete</span> obj;</span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，有一些规则类需要遵守：  </p>
+<ol>
+<li>必须一个公开的构造函数，它有一个lua_State*参数;  </li>
+<li>被注册的成员函数签名必须是 int(T::<em>)(lua_State</em>);  </li>
+<li>必须有一个 public static const char[] className成员;  </li>
+<li>必须有一个 public static const Luna<t>::RegType[] Register成员；  </t></li>
+</ol>
+<p>注释：这些要求是我所选择的设计的要求，你可以使用不同的接口，只需要代码做很小的改动。  </p>
+<p>Luna<t>::RegType 是一个函数哈希表。name 是被注册的 mfunc 函数的名字。  </t></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> RegType &#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* name;</span><br><span class="line">    <span class="function"><span class="keyword">const</span> <span class="title">int</span><span class="params">(T::*mfunc)</span><span class="params">(lua_State*)</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这里有一个注册C++类到Lua中的例子。Luna<t>::Register() 调用会注册这个类，它也是这个模板类唯一要求的公开接口。要在Lua中使用此类，你可通过调用表的构造函数来创建此类的一个实例。  </t></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> Account &#123;</span><br><span class="line">    <span class="keyword">double</span> m_balance;</span><br><span class="line">    <span class="keyword">public</span>:</span><br><span class="line">    Account(lua_State* L) &#123;</span><br><span class="line">        <span class="comment">/* constructor table at top of stack */</span></span><br><span class="line">        lua_pushstring(L, <span class="string">"balance"</span>);</span><br><span class="line">        lua_gettable(L, <span class="number">-2</span>);</span><br><span class="line">        m_balance = lua_tonumber(L, <span class="number">-1</span>);</span><br><span class="line">        lua_pop(L, <span class="number">2</span>); <span class="comment">/* pop constructor table and balance */</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">deposit</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">        m_balance += lua_tonumber(L, <span class="number">-1</span>);</span><br><span class="line">        lua_pop(L, <span class="number">1</span>);</span><br><span class="line">        return <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">withdraw</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">        m_balance -= lua_tonumber(L, <span class="number">-1</span>);</span><br><span class="line">        lua_pop(L, <span class="number">1</span>);</span><br><span class="line">        return <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">balance</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line">        lua_pushnumber(L, m_balance);</span><br><span class="line">        return <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span>[] className;</span><br><span class="line">        <span class="keyword">static</span> <span class="keyword">const</span> Luna&lt;Account&gt;::RegType Register</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>[] Account::className = <span class="string">"Account"</span>;</span><br><span class="line">    <span class="keyword">const</span> Luna&lt;Account&gt;::RegType Account::Register[] = &#123;</span><br><span class="line">        &#123; <span class="string">"deposit"</span>,  &amp;Account::deposit &#125;,</span><br><span class="line">        &#123; <span class="string">"withdraw"</span>, &amp;Account::withdraw &#125;,</span><br><span class="line">        &#123; <span class="string">"balance"</span>,  &amp;Account::balance &#125;,</span><br><span class="line">        &#123; <span class="number">0</span> &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//[...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Register the class Account with state L */</span></span><br><span class="line">Luna&lt;Account&gt;::Register(L);</span><br></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- In Lua</span></span><br><span class="line"><span class="comment">-- create an Account object</span></span><br><span class="line"><span class="keyword">local</span> account = Account&#123; balance = <span class="number">100</span> &#125;</span><br><span class="line">account:deposit(<span class="number">50</span>)</span><br><span class="line">account:withdraw(<span class="number">25</span>)</span><br><span class="line"><span class="keyword">local</span> b = account:balance()</span><br></pre></td></tr></table></figure>
+<p>Account实例的表如下：  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0 = userdata(6): 0x804df80</span><br><span class="line">balance = function: 0x804ec10</span><br><span class="line">withdraw = function: 0x804ebf0</span><br><span class="line">deposit = function: 0x804f9c8</span><br></pre></td></tr></table></figure>
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>也许有些人不喜欢使用C++模板，但在此处却是合适的。它们提供了一个起初看起来复杂但快速严密的解决方案。作为使用模板的回报，类是类型安全的，例如，它不可能在成员函数哈希表中混合不同类型的成员函数，因为编译器会报怨的。此外，静态模板类的设计，使它容易使用，在你做完事后没有模板实例需要清除。  </p>
+<p>thunk机制是类的核心，因为它转换了函数调用。它通过将表调用的函数对应的对象指针索引到成员函数哈希表中。(Lua表的函数调用 table:function() 是 table.function(table) 调用的语法糖)。这个调用会将表最先压入栈中，接着是参数。成员函数的索引做为一个闭包值压入栈的最后。最开始，我将对象指针也做为一个闭包值，这意味着有2个闭包值，一个void *的对象指针，一个成员函数的索引，这样花费更多，但访问更快。当然，表中用于垃圾回收的userdata对象还是需要的。最后，我选择了将对象指针索引到表中，以节省资源，但增加调用的时间消耗。</p>
+<p>实际上，这个实现只利用了Lua扩展机制很少的特性，闭包来保持成员函数的索引，’gc’标志成员用于垃圾回收，表的构造函数做函数注册和成员函数的调用。</p>
+<p>为什么只允许签名为 int(T::*)(lua_State*) 成员函数被注册？这允许你的成员函数和Lua直接交互，接收Lua传入的参数并返回值到Lua，调用任何的Lua Api函数等。此外，它提供了与注册到Lua中的C函数相同的签名，这使得想使用C++的人更方便。  </p>
+<h2 id="不足"><a href="#不足" class="headerlink" title="不足"></a>不足</h2><p>这个模板类方案只能绑定特定签名的成员函数。如果你有之前写的类，或想在Lua和C++的环境中都能使用，这个方案对你来说可能不是最好的。理论上这不是一个问题。使用代理模式，我们封装实际的类，并且代理任何对目标对象的调用。代理类的成员函数强迫Lua的参数和返回值，并且代理对目标对象的调用。你将在Lua中注册代理类，而不是实际类。Additionally, you may use inheritance as well where the proxy class inherits from the base class and delegates the function calls up to the base class, but with one caveat, the base class must have a default constructor; you cannot get the constructor arguments from Lua to the base class in the proxy’s constructor initializer list。代理模式解决了我们想在Lua和C++环境中使用的问题，但它要求我们写代理类并且维护它们。</p>
+<p>对象都是简单的创建，但需要给用户创建对象时更多的控制。比如，用户也许希望注册一个单例类。一个单例需要用户实现一个返回一个对象的静态 create() 成员函数。这种方式，用户可以实现单例模式，简单的通过new分配对象或者其它方法。constructor函数需要做修改来调用create()而不是使用new来获取一个对象的指针。这对类要求了更多的约束但更灵活。 A “hook” for garbage collection may be of use to some as well.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个文章说明了一个绑定C++类到Lua的简单方法。这个实现如此简单，你可以选择修改它来满足你的目的，也满足了一般的需求。也有一些其它的工具来绑定C++类到Lua中，如 tolua、SWIGLua和一些其它像本文的简单实现。根据它们的优点、缺点来解决你特定的问题。希望本文能给你一些解决此类问题的提示。</p>
+<p>模板类的所有源码大概在70行左右，可以Lua的<a href="http://www.lua.org/addons.html" target="_blank" rel="external">add-ons</a>面面获取。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p>[1] R. Hickey, <a href="http://www.bestweb.net/~rhickey/functor.html" target="_blank" rel="external">Callbacks in C++ using template functors</a>, C++ Report February 95  </p>
+<p>Last update: Wed Mar 12 11:51:13 EST 2003 by lhf.</p>
+<hr>
+<p>欢迎转载，原文地址：<a href="http://www.lontoken.com/a-template-class-for-binding-cpp-to-lua-translate" target="_blank" rel="external">http://www.lontoken.com/a-template-class-for-binding-cpp-to-lua-translate</a></p>
+<hr>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/lua-翻译-C/" rel="tag">#lua,翻译,C++</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/01/05/lua-and-c-interaction-by-source/" rel="next" title="Lua和C交互之Lua调用C--源码分析">
+                <i class="fa fa-chevron-left"></i> Lua和C交互之Lua调用C--源码分析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/02/14/analysis-of-lua-bytecode-flie/" rel="prev" title="lua字节码的解析">
+                lua字节码的解析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/"
+           data-title="A template class for binding C++ to Lua(翻译)" data-url="http://yoursite.com/2014/01/06/a-template-class-for-binding-cpp-to-lua-translate/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="lontoken" />
+          <p class="site-author-name" itemprop="name">lontoken</p>
+          <p class="site-description motion-element" itemprop="description">简单 可依赖</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#A-template-class-for-binding-C-to-Lua"><span class="nav-number">1.</span> <span class="nav-text">A template class for binding C++ to Lua</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-number">1.1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方案"><span class="nav-number">1.3.</span> <span class="nav-text">方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">1.4.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#不足"><span class="nav-number">1.5.</span> <span class="nav-text">不足</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.7.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lontoken</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lontoken"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>

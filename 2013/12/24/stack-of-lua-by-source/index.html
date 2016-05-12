@@ -1,0 +1,675 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="lua,栈,源码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="lua的栈–源码分析lua中有两种栈:数据栈和调用栈.
+栈的定义和结构lua中的数据可以分为两类:值类型和引用类型,值类型可以被任意复制,而引用类型共享一份数据,复制时只是复制其引用,并由GC负责维护其生命期.lua使用一个unine Value来保存数据.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lua的栈--源码分析">
+<meta property="og:url" content="http://yoursite.com/2013/12/24/stack-of-lua-by-source/index.html">
+<meta property="og:site_name" content="lontoken' blog">
+<meta property="og:description" content="lua的栈–源码分析lua中有两种栈:数据栈和调用栈.
+栈的定义和结构lua中的数据可以分为两类:值类型和引用类型,值类型可以被任意复制,而引用类型共享一份数据,复制时只是复制其引用,并由GC负责维护其生命期.lua使用一个unine Value来保存数据.">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-1.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-2.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-3.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-4.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-5.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-6.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-7.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-8.png">
+<meta property="og:image" content="http://yoursite.com/images/lua-stack-9.png">
+<meta property="og:updated_time" content="2016-05-12T17:32:33.010Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lua的栈--源码分析">
+<meta name="twitter:description" content="lua的栈–源码分析lua中有两种栈:数据栈和调用栈.
+栈的定义和结构lua中的数据可以分为两类:值类型和引用类型,值类型可以被任意复制,而引用类型共享一份数据,复制时只是复制其引用,并由GC负责维护其生命期.lua使用一个unine Value来保存数据.">
+<meta name="twitter:image" content="http://yoursite.com/images/lua-stack-1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> lua的栈--源码分析 | lontoken' blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?2f2bb507fa5f77e7b3752a4657d34e9f";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">lontoken' blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                lua的栈--源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2013-12-24T00:00:00+08:00" content="2013-12-24">
+              2013-12-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/lua/" itemprop="url" rel="index">
+                    <span itemprop="name">lua</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2013/12/24/stack-of-lua-by-source/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2013/12/24/stack-of-lua-by-source/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="lua的栈–源码分析"><a href="#lua的栈–源码分析" class="headerlink" title="lua的栈–源码分析"></a>lua的栈–源码分析</h1><p>lua中有两种栈:数据栈和调用栈.</p>
+<h2 id="栈的定义和结构"><a href="#栈的定义和结构" class="headerlink" title="栈的定义和结构"></a>栈的定义和结构</h2><p>lua中的数据可以分为两类:值类型和引用类型,值类型可以被任意复制,而引用类型共享一份数据,复制时只是复制其引用,并由GC负责维护其生命期.lua使用一个unine Value来保存数据.<br><a id="more"></a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">union</span> Value &#123;  </span><br><span class="line">    GCObject *gc;    <span class="comment">/* collectable objects */</span>  </span><br><span class="line">    <span class="keyword">void</span> *p;         <span class="comment">/* light userdata */</span>  </span><br><span class="line">    <span class="keyword">int</span> b;           <span class="comment">/* booleans */</span>  </span><br><span class="line">    lua_CFunction f; <span class="comment">/* light C functions */</span>  </span><br><span class="line">    numfield         <span class="comment">/* numbers */</span>  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>引用类型用一个指针GCObject *gc来间接引用,而其它值类型都直接保存在联合中.  </p>
+<p>在lua_State中栈的保存如下:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> lua_State &#123;  </span><br><span class="line">    StkId top;          <span class="comment">/* first free slot in the stack */</span></span><br><span class="line">    StkId stack_last;   <span class="comment">/* last free slot in the stack */</span>  </span><br><span class="line">    StkId <span class="built_in">stack</span>;        <span class="comment">/* stack base */</span>  </span><br><span class="line">    <span class="keyword">int</span> stacksize;</span><br><span class="line">    CallInfo base_ci;  <span class="comment">/* CallInfo for first level (C calling Lua) */</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>StkId的定义:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> TValue *StkId;  </span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> lua_TValue TValue;  </span><br><span class="line"><span class="keyword">struct</span> lua_TValue &#123;  </span><br><span class="line">    TValuefields;  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TValuefields    Value value_; int tt_</span></span><br></pre></td></tr></table></figure>
+<p>在Windows VC下:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> TValuefields  \  </span></span><br><span class="line"><span class="keyword">union</span> &#123; <span class="keyword">struct</span> &#123; Value v__; <span class="keyword">int</span> tt__; &#125; i; <span class="keyword">double</span> d__; &#125; u</span><br></pre></td></tr></table></figure>
+<p>这里使用了繁杂的宏定义,TValuefields和numfield是为了应用一个被称为NaN Trick的技巧.  </p>
+<p>lua初始化堆栈:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">stack_init</span> <span class="params">(lua_State *L1, lua_State *L)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i; CallInfo *ci;</span><br><span class="line">    <span class="comment">/* initialize stack array */</span></span><br><span class="line">    L1-&gt;<span class="built_in">stack</span> = luaM_newvector(L, BASIC_STACK_SIZE, TValue);        <span class="comment">//BASIC_STACK_SIZE为40</span></span><br><span class="line">    L1-&gt;stacksize = BASIC_STACK_SIZE;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; BASIC_STACK_SIZE; i++)</span><br><span class="line">        setnilvalue(L1-&gt;<span class="built_in">stack</span> + i);  <span class="comment">/* erase new stack */</span>          <span class="comment">//将tt_字段设置为0</span></span><br><span class="line">    L1-&gt;top = L1-&gt;<span class="built_in">stack</span>;</span><br><span class="line">    L1-&gt;stack_last = L1-&gt;<span class="built_in">stack</span> + L1-&gt;stacksize - EXTRA_STACK;       <span class="comment">//EXTRA_STACK为5</span></span><br><span class="line">    <span class="comment">/* initialize first ci */</span></span><br><span class="line">    ci = &amp;L1-&gt;base_ci;</span><br><span class="line">    ci-&gt;next = ci-&gt;previous = <span class="literal">NULL</span>;</span><br><span class="line">    ci-&gt;callstatus = <span class="number">0</span>;</span><br><span class="line">    ci-&gt;func = L1-&gt;top;</span><br><span class="line">    setnilvalue(L1-&gt;top++);  <span class="comment">/* 'function' entry for this 'ci' */</span></span><br><span class="line">    ci-&gt;top = L1-&gt;top + LUA_MINSTACK;</span><br><span class="line">    L1-&gt;ci = ci;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化之后,lua_State栈的情况:<br><img src="/images/lua-stack-1.png" alt="lua_State栈的情况"></p>
+<p>lua供C使用的栈相关API是不检查数据栈越界的,因为通常编写C扩展都能把数据栈空间的使用控制在BASIC_STACK_SIZE以内,或是显式扩展.对每次数据栈访问都强制做越界检查是非常低效的.<br>数据栈不够用时,可以使用luaD_reallocstack\luaD_growstack函数扩展,每次至少分配比原来大一倍的空间.  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* some space for error handling */</span>  </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ERRORSTACKSIZE  (LUAI_MAXSTACK + 200)  </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaD_reallocstack</span> <span class="params">(lua_State *L, <span class="keyword">int</span> newsize)</span> </span>&#123;        </span><br><span class="line">    TValue *oldstack = L-&gt;<span class="built_in">stack</span>;        </span><br><span class="line">    <span class="keyword">int</span> lim = L-&gt;stacksize;     </span><br><span class="line">    lua_assert(newsize &lt;= LUAI_MAXSTACK || newsize == ERRORSTACKSIZE);  </span><br><span class="line">    lua_assert(L-&gt;stack_last - L-&gt;<span class="built_in">stack</span> == L-&gt;stacksize - EXTRA_STACK);  </span><br><span class="line">    luaM_reallocvector(L, L-&gt;<span class="built_in">stack</span>, L-&gt;stacksize, newsize, TValue);</span><br><span class="line">    <span class="keyword">for</span> (; lim &lt; newsize; lim++)   </span><br><span class="line">        setnilvalue(L-&gt;<span class="built_in">stack</span> + lim); <span class="comment">/* erase new segment */</span>  </span><br><span class="line">    L-&gt;stacksize = newsize;  </span><br><span class="line">    L-&gt;stack_last = L-&gt;<span class="built_in">stack</span> + newsize - EXTRA_STACK;  </span><br><span class="line">    correctstack(L, oldstack);  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaD_growstack</span> <span class="params">(lua_State *L, <span class="keyword">int</span> n)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> size = L-&gt;stacksize;  </span><br><span class="line">    <span class="keyword">if</span> (size &gt; LUAI_MAXSTACK)  <span class="comment">/* error after extra size? */</span>  </span><br><span class="line">        luaD_throw(L, LUA_ERRERR);  </span><br><span class="line">    <span class="keyword">else</span> &#123;  </span><br><span class="line">        <span class="keyword">int</span> needed = cast_int(L-&gt;top - L-&gt;stack) + n + EXTRA_STACK;  </span><br><span class="line">        <span class="keyword">int</span> newsize = <span class="number">2</span> * size;  </span><br><span class="line">        <span class="keyword">if</span> (newsize &gt; LUAI_MAXSTACK) newsize = LUAI_MAXSTACK;  </span><br><span class="line">        <span class="keyword">if</span> (newsize &lt; needed) newsize = needed;  </span><br><span class="line">        <span class="keyword">if</span> (newsize &gt; LUAI_MAXSTACK) &#123;  <span class="comment">/* stack overflow? */</span>  </span><br><span class="line">            luaD_reallocstack(L, ERRORSTACKSIZE);  </span><br><span class="line">            luaG_runerror(L, <span class="string">"stack overflow"</span>);  </span><br><span class="line">        &#125;  </span><br><span class="line">        <span class="keyword">else</span>   </span><br><span class="line">            luaD_reallocstack(L, newsize);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>数据栈扩展的过程,伴随着数据拷贝,这些数据都是可能直接值复制的,所有不需要在扩展之后修正其中的指针.但有此外部对数据栈的引用需要修正为正确的新地址.这些需要修正的位置包括upvalue以及执行对数据栈的引用.此过程由correctstack函数实现.  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">correctstack</span> <span class="params">(lua_State *L, TValue *oldstack)</span> </span>&#123;  </span><br><span class="line">    CallInfo *ci;  </span><br><span class="line">    GCObject *up;  </span><br><span class="line">    L-&gt;top = (L-&gt;top - oldstack) + L-&gt;<span class="built_in">stack</span>;  </span><br><span class="line">    <span class="keyword">for</span> (up = L-&gt;openupval; up != <span class="literal">NULL</span>; up = up-&gt;gch.next)  </span><br><span class="line">        gco2uv(up)-&gt;v = (gco2uv(up)-&gt;v - oldstack) + L-&gt;<span class="built_in">stack</span>;  </span><br><span class="line">    <span class="keyword">for</span> (ci = L-&gt;ci; ci != <span class="literal">NULL</span>; ci = ci-&gt;previous) &#123;  </span><br><span class="line">        ci-&gt;top = (ci-&gt;top - oldstack) + L-&gt;<span class="built_in">stack</span>;  </span><br><span class="line">    ci-&gt;func = (ci-&gt;func - oldstack) + L-&gt;<span class="built_in">stack</span>;  </span><br><span class="line">    <span class="keyword">if</span> (isLua(ci))  </span><br><span class="line">        ci-&gt;u.l.base = (ci-&gt;u.l.base - oldstack) + L-&gt;<span class="built_in">stack</span>;  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="栈的使用"><a href="#栈的使用" class="headerlink" title="栈的使用"></a>栈的使用</h2><p>入栈的函数或宏:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lua_pushnil\lua_pushnumber\lua_pushinteger\lua_pushunsigned\lua_pushlstring\lua_pushstring\lua_pushvfstring\lua_pushfstring\lua_pushcclosure\lua_pushboolean\lua_pushlightuserdata\lua_pushthread\lua_newtable\lua_register\lua_pushcfunction;  </span><br><span class="line">lua_getglobal\lua_gettable\lua_getfield\lua_rawget\lua_rawgeti\lua_rawgetp\lua_createtable\lua_newuserdata\lua_getmetatable\lua_getuservalue</span><br></pre></td></tr></table></figure>
+<p>lua_pushnumber定义如下:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LUA_API <span class="keyword">void</span> <span class="title">lua_pushinteger</span> <span class="params">(lua_State *L, lua_Integer n)</span> </span>&#123;  </span><br><span class="line">    lua_lock(L);  </span><br><span class="line">    <span class="comment">//VS下展开之后:TValue *io_=(L-&gt;top); ((io_)-&gt;u.d__)=(n); ((void)0);  </span></span><br><span class="line">    setnvalue(L-&gt;top, cast_num(n));  </span><br><span class="line">    <span class="comment">//VS下展开之后:L-&gt;top++; ((void)0);  </span></span><br><span class="line">    api_incr_top(L);  </span><br><span class="line">    lua_unlock(L);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>lua_newtable的定义如下:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lua_newtable(L)     lua_createtable(L, 0, 0)  </span></span><br><span class="line"><span class="function">LUA_API <span class="keyword">void</span> <span class="title">lua_createtable</span> <span class="params">(lua_State *L, <span class="keyword">int</span> narray, <span class="keyword">int</span> nrec)</span> </span>&#123;     </span><br><span class="line">    Table *t;   </span><br><span class="line">    lua_lock(L);  </span><br><span class="line">    luaC_checkGC(L);  </span><br><span class="line">    t = luaH_new(L);  </span><br><span class="line">    <span class="comment">//VC下展开之后:TValue *io=(L-&gt;top); ((io)-&gt;u.i.v__).gc=((GCObject *)((t)));  </span></span><br><span class="line">    <span class="comment">//(((io)-&gt;u.i.tt__) = (0x7FF7A500 | (((5) | (1 &lt;&lt; 6))))); ((void)0);  </span></span><br><span class="line">    sethvalue(L, L-&gt;top, t); </span><br><span class="line">    <span class="comment">//VC下展开之后:L-&gt;top++; ((void)0);  </span></span><br><span class="line">    api_incr_top(L);   </span><br><span class="line">    <span class="keyword">if</span> (narray &gt; <span class="number">0</span> || nrec &gt; <span class="number">0</span>)  </span><br><span class="line">    luaH_resize(L, t, narray, nrec);  </span><br><span class="line">    lua_unlock(L);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例代码如下:  </p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lua_State* L = luaL_newstate();</span><br><span class="line">lua_pushnumber(L, <span class="number">1</span>);</span><br><span class="line">lua_newtable(L);</span><br></pre></td></tr></table></figure>
+<p>lua_pushinteger(L, 1)之后,栈的情况:<br><img src="/images/lua-stack-2.png" alt="栈的情况2"></p>
+<p>lua_newtable(L)之后,栈的情况:<br><img src="/images/lua-stack-3.png" alt="栈的情况3"></p>
+<p>出栈的函数或宏:  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    lua_setglobal\lua_settable\lua_setfield\lua_rawset\lua_rawseti\lua_rawsetp\lua_setmetatable\lua_setuservalue  </span><br><span class="line">从栈中获取数据的函数或宏:  </span><br><span class="line">    luaL_checklstring\luaL_checknumber\luaL_checkinteger\luaL_checkunsigned  </span><br><span class="line">lua_settable的定义如下:</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LUA_API <span class="keyword">void</span> <span class="title">lua_settable</span> <span class="params">(lua_State *L, <span class="keyword">int</span> idx)</span> </span>&#123;  </span><br><span class="line">    StkId t;  </span><br><span class="line">    lua_lock(L);  </span><br><span class="line">    api_checknelems(L, <span class="number">2</span>);  </span><br><span class="line">    t = index2addr(L, idx);  </span><br><span class="line">    luaV_settable(L, t, L-&gt;top - <span class="number">2</span>, L-&gt;top - <span class="number">1</span>);  </span><br><span class="line">    L-&gt;top -= <span class="number">2</span>;  <span class="comment">/* pop index and value */</span>  </span><br><span class="line">    lua_unlock(L);  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>luaL_checknumber的定义如下:  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">LUALIB_API lua_Number <span class="title">luaL_checknumber</span> <span class="params">(lua_State *L, <span class="keyword">int</span> narg)</span> </span>&#123;  </span><br><span class="line">    <span class="keyword">int</span> isnum;  </span><br><span class="line">    lua_Number d = lua_tonumberx(L, narg, &amp;isnum);  </span><br><span class="line">    <span class="keyword">if</span> (!isnum)  </span><br><span class="line">        tag_error(L, narg, LUA_TNUMBER);  </span><br><span class="line">    return d;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>示例代码如下(lua库的luaopen_base函数,用于注册):  </p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lua_pushglobaltable(L)  \</span><br><span class="line">    lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_RIDX_GLOBALS)</span></span><br><span class="line"></span><br><span class="line"><span class="function">LUALIB_API <span class="keyword">void</span> <span class="title">luaL_setfuncs</span> <span class="params">(lua_State *L, <span class="keyword">const</span> luaL_Reg *l, <span class="keyword">int</span> nup)</span> </span>&#123;</span><br><span class="line">    luaL_checkversion(L);</span><br><span class="line">    luaL_checkstack(L, nup, <span class="string">"too many upvalues"</span>);</span><br><span class="line">    <span class="keyword">for</span> (; l-&gt;name != <span class="literal">NULL</span>; l++) &#123;  <span class="comment">/* fill the table with given functions */</span></span><br><span class="line">        <span class="keyword">int</span> i;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; nup; i++)  <span class="comment">/* copy upvalues to the top */</span></span><br><span class="line">            lua_pushvalue(L, -nup);</span><br><span class="line">        lua_pushcclosure(L, l-&gt;func, nup);  <span class="comment">/* closure with those upvalues */</span></span><br><span class="line">        lua_setfield(L, -(nup + <span class="number">2</span>), l-&gt;name);</span><br><span class="line">    &#125;</span><br><span class="line">    lua_pop(L, nup);  <span class="comment">/* remove upvalues */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LUAMOD_API <span class="keyword">int</span> <span class="title">luaopen_base</span> <span class="params">(lua_State *L)</span> </span>&#123;  </span><br><span class="line">    <span class="comment">/* set global _G */</span>  </span><br><span class="line">    lua_pushglobaltable(L);  </span><br><span class="line">    lua_pushglobaltable(L);  </span><br><span class="line">    lua_setfield(L, <span class="number">-2</span>, <span class="string">"_G"</span>);       </span><br><span class="line">    <span class="comment">/* open lib into global table */</span>  </span><br><span class="line">    luaL_setfuncs(L, base_funcs, <span class="number">0</span>);  </span><br><span class="line">    lua_pushliteral(L, LUA_VERSION);  </span><br><span class="line">    lua_setfield(L, <span class="number">-2</span>, <span class="string">"_VERSION"</span>);  <span class="comment">/* set global _VERSION */</span>  </span><br><span class="line">    return <span class="number">1</span>;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>luaopen_base函数设置全局注册表的”_G”字段,base_funcs指定的函数列表,”_VERSION”字段.<br>第一个lua_pushglobaltable(L)之后:<br><img src="/images/lua-stack-4.png" alt="栈的情况4"></p>
+<p>第二个lua_pushglobaltable(L)之后:<br><img src="/images/lua-stack-5.png" alt="栈的情况5"></p>
+<p>lua_setfield(L, -2, “_G”)之后:<br><img src="/images/lua-stack-6.png" alt="lua-stack-6"></p>
+<p>luaL_setfuncs(L, base_funcs, 0)之后:<br><img src="/images/lua-stack-7.png" alt="lua-stack-7"></p>
+<p>lua_pushliteral(L, LUA_VERSION)之后:<br><img src="/images/lua-stack-8.png" alt="lua-stack-8"></p>
+<p>lua_setfield(L, -2, “_VERSION”)<br><img src="/images/lua-stack-9.png" alt="lua-stack-9"></p>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><ul>
+<li>lua源码分析<a href="http://www.codingnow.com/temp/readinglua.pdf" target="_blank" rel="external">http://www.codingnow.com/temp/readinglua.pdf</a></li>
+<li>lua源程序<a href="http://www.lua.org/download.html" target="_blank" rel="external">http://www.lua.org/download.html</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/lua-栈-源码/" rel="tag">#lua,栈,源码</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/12/12/text-file-code-mode-recognize/" rel="next" title="文本文件编码模式识别">
+                <i class="fa fa-chevron-left"></i> 文本文件编码模式识别
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/01/05/lua-and-c-interaction-by-source/" rel="prev" title="Lua和C交互之Lua调用C--源码分析">
+                Lua和C交互之Lua调用C--源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2013/12/24/stack-of-lua-by-source/"
+           data-title="lua的栈--源码分析" data-url="http://yoursite.com/2013/12/24/stack-of-lua-by-source/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="lontoken" />
+          <p class="site-author-name" itemprop="name">lontoken</p>
+          <p class="site-description motion-element" itemprop="description">简单 可依赖</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">43</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#lua的栈–源码分析"><span class="nav-number">1.</span> <span class="nav-text">lua的栈–源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#栈的定义和结构"><span class="nav-number">1.1.</span> <span class="nav-text">栈的定义和结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#栈的使用"><span class="nav-number">1.2.</span> <span class="nav-text">栈的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资源"><span class="nav-number">1.3.</span> <span class="nav-text">参考资源</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">lontoken</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"lontoken"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
