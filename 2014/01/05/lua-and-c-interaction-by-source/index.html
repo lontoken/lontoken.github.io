@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Lua,C,lua和C,lua源码," />
+  <meta name="keywords" content="C++,Lua," />
 
 
 
@@ -88,9 +88,9 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Lua和C交互之Lua调用C--源码分析">
 <meta property="og:url" content="http://yoursite.com/2014/01/05/lua-and-c-interaction-by-source/index.html">
-<meta property="og:site_name" content="lontoken'blog">
+<meta property="og:site_name" content="lontoken' blog">
 <meta property="og:description" content="Lua和C交互–源码分析最近在读Lua的源码，之前在Lua中调用C导出的函数和导出的userdata，觉得很方便，没去深究，不知道自己写的代码在栈层面是个如何情形，为什么lua中的一个函数调用，就能进入dll库的对应里。想弄明白这些问题，通过google搜索，大多没有深入的分析，不能令人满意。现在借此机会，将整个流程弄明白，顺便分享。">
-<meta property="og:updated_time" content="2016-05-12T17:38:08.270Z">
+<meta property="og:updated_time" content="2016-05-14T09:13:28.010Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Lua和C交互之Lua调用C--源码分析">
 <meta name="twitter:description" content="Lua和C交互–源码分析最近在读Lua的源码，之前在Lua中调用C导出的函数和导出的userdata，觉得很方便，没去深究，不知道自己写的代码在栈层面是个如何情形，为什么lua中的一个函数调用，就能进入dll库的对应里。想弄明白这些问题，通过google搜索，大多没有深入的分析，不能令人满意。现在借此机会，将整个流程弄明白，顺便分享。">
@@ -111,7 +111,7 @@
   };
 </script>
 
-  <title> Lua和C交互之Lua调用C--源码分析 | lontoken'blog </title>
+  <title> Lua和C交互之Lua调用C--源码分析 | lontoken' blog </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -152,7 +152,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">lontoken'blog</span>
+      <span class="site-title">lontoken' blog</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -274,6 +274,18 @@
 
                 
                 
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Lua/C/" itemprop="url" rel="index">
+                    <span itemprop="name">C++</span>
+                  </a>
+                </span>
+
+                
+                
 
               
             </span>
@@ -343,7 +355,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Lua-C-lua和C-lua源码/" rel="tag">#Lua,C,lua和C,lua源码</a>
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+            <a href="/tags/Lua/" rel="tag">#Lua</a>
           
         </div>
       
@@ -429,7 +443,7 @@
                src="/images/avatar.gif"
                alt="lontoken" />
           <p class="site-author-name" itemprop="name">lontoken</p>
-          <p class="site-description motion-element" itemprop="description">简单可依赖</p>
+          <p class="site-description motion-element" itemprop="description">保持低调,也不失高雅.</p>
         </div>
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
@@ -442,7 +456,7 @@
           
             <div class="site-state-item site-state-categories">
               
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">分类</span>
               
             </div>
@@ -451,7 +465,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -462,6 +476,26 @@
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/lontoken" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.douban.com/people/lonthink/" target="_blank" title="豆瓣">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  豆瓣
+                </a>
+              </span>
+            
           
         </div>
 
